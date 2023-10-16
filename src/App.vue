@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>中文打字練習</h1>
+    <h1>注音打字練習</h1>
     <type-area></type-area>
   </div>
 </template>

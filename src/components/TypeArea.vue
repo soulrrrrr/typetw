@@ -1,5 +1,11 @@
 <template>
   <div class="type-area-container">
+
+    <!-- Displaying Title and Author -->
+    <div class="title-author">
+      <h2>{{ titleText }}</h2>
+      <h2>{{ authorText }}</h2>
+    </div>
     <!-- Displaying Content Text -->
     <div class="content-text">
       {{ targetText }}
@@ -10,12 +16,22 @@
       <span v-for="(char, index) in displayedChars" :key="index" :class="char.class">{{ char.letter }}</span>
     </div>
 
+    <button class="refresh-button" @click="refreshPoem">下一題</button>
+
 
   </div>
 </template>
 
 
 <style scoped>
+
+.title-author {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
 .type-area {
   background-color: rgb(50, 52, 55);
   /* 背景顏色 */
@@ -59,6 +75,30 @@
     opacity: 0;
   }
 }
+
+/* Style for the refresh button */
+.refresh-button {
+  padding: 10px 20px; /* Adjust padding to your preference */
+  background-color: #DD8C6D; /* Background color */
+  color: #fff; /* Text color */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add some rounded corners */
+  cursor: pointer; /* Show a pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Make the text bold */
+  transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
+  display: block; /* Ensures the button is treated as a block-level element */
+  margin: 20px auto 0 auto; /* Top and bottom are 20px and 0, respectively; left and right are auto */
+  
+
+  /* Add a hover effect */
+  &:hover {
+    background-color: #BC6A51; /* Change background color on hover */
+  }
+}
+
+
+
 </style>
 
 <script>
@@ -70,6 +110,8 @@ export default {
     // Randomly select a poem from the list
     const poem = poemsData.poems[Math.floor(Math.random() * poemsData.count)];
     return {
+      titleText: poem.title,
+      authorText: poem.author,
       targetText: poem.content,
       zhuyinText: poem.zhuyin,
       keyboardText: poem.keyboard,
@@ -90,6 +132,17 @@ export default {
     }
   },
   methods: {
+    refreshPoem() {
+      // Randomly select a new poem from the list
+      const poem = poemsData.poems[Math.floor(Math.random() * poemsData.count)];
+      this.titleText = poem.title;
+      this.authorText = poem.author;
+      this.targetText = poem.content;
+      this.zhuyinText = poem.zhuyin;
+      this.keyboardText = poem.keyboard;
+      this.displayedText = [];
+      this.currentKeyboardIndex = 0;
+    },
     handleKeydown(event) {
       if (event.key === ' ') {
         event.preventDefault();

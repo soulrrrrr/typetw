@@ -24,7 +24,6 @@
 
 
 <style scoped>
-
 .title-author {
   display: flex;
   justify-content: space-between;
@@ -78,27 +77,36 @@
 
 /* Style for the refresh button */
 .refresh-button {
-  padding: 10px 20px; /* Adjust padding to your preference */
-  background-color: #DD8C6D; /* Background color */
-  color: #fff; /* Text color */
-  border: none; /* Remove button border */
-  border-radius: 5px; /* Add some rounded corners */
-  cursor: pointer; /* Show a pointer cursor on hover */
-  font-size: 16px; /* Font size */
-  font-weight: bold; /* Make the text bold */
-  transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
-  display: block; /* Ensures the button is treated as a block-level element */
-  margin: 20px auto 0 auto; /* Top and bottom are 20px and 0, respectively; left and right are auto */
-  
+  padding: 10px 20px;
+  /* Adjust padding to your preference */
+  background-color: #DD8C6D;
+  /* Background color */
+  color: #fff;
+  /* Text color */
+  border: none;
+  /* Remove button border */
+  border-radius: 5px;
+  /* Add some rounded corners */
+  cursor: pointer;
+  /* Show a pointer cursor on hover */
+  font-size: 16px;
+  /* Font size */
+  font-weight: bold;
+  /* Make the text bold */
+  transition: background-color 0.2s ease-in-out;
+  /* Smooth transition for background color */
+  display: block;
+  /* Ensures the button is treated as a block-level element */
+  margin: 20px auto 0 auto;
+  /* Top and bottom are 20px and 0, respectively; left and right are auto */
+
 
   /* Add a hover effect */
   &:hover {
-    background-color: #BC6A51; /* Change background color on hover */
+    background-color: #BC6A51;
+    /* Change background color on hover */
   }
 }
-
-
-
 </style>
 
 <script>
@@ -142,28 +150,45 @@ export default {
       this.keyboardText = poem.keyboard;
       this.displayedText = [];
       this.currentKeyboardIndex = 0;
+      this.$emit('poem-refreshed');
     },
     handleKeydown(event) {
+      // apple preventDefault() on spacebar
       if (event.key === ' ') {
         event.preventDefault();
       }
+
+      if (this.displayedText.length === this.zhuyinText.length) {
+        return;
+      }
+
+      if (this.displayedText.length === 0 && event.key.length === 1) {
+        this.$emit('startedTyping'); // Notify the parent when the user starts typing the very first character.
+      }
+
       if (event.key === 'Backspace') {
         if (this.displayedText.length > 0) {
           // Remove the last character from displayedText
           this.displayedText.pop();
           this.currentKeyboardIndex -= 1;
         }
-      } else {
+      } else if (event.key.length === 1) {
         // Check if the pressed key matches the current position in the keyboard representation
         const isCorrect = this.keyboardText[this.currentKeyboardIndex] === event.key;
         if (isCorrect) {
           this.displayedText.push({ letter: this.zhuyinText[this.displayedText.length], correct: true });
+          this.$emit('correctTyped'); // Notify the parent of a correct character typed.
         } else {
           this.displayedText.push({ letter: this.zhuyinText[this.displayedText.length], correct: false });
-          // Decide if you want to increment currentKeyboardIndex on incorrect input or not
-          // For now, we're not incrementing it.
+          this.$emit('incorrectTyped'); // Notify the parent of an incorrect character typed.
         }
+
         this.currentKeyboardIndex++;
+      }
+
+      if (this.displayedText.length === this.zhuyinText.length) {
+        this.$emit('finishedTyping'); // Notify the parent when the user finishes typing.
+        return;
       }
     }
 

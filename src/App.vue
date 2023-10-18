@@ -1,19 +1,59 @@
 <template>
   <div id="app">
     <h1>注音打字練習</h1>
-    <type-area></type-area>
+    <type-timer :is-typing="isTyping" :start-time="startTime" :end-time="endTime" :correct-count="correctCount"
+      :total-typed="totalTyped" />
+    <type-area @startedTyping="startTimer" @finishedTyping="stopTimer" @correctTyped="incrementCorrectCount"
+      @incorrectTyped="incrementIncorrectCount" @poem-refreshed="resetTypingData"></type-area>
+
   </div>
 </template>
 
 
 <script>
 import TypeArea from "./components/TypeArea.vue";
+import TypeTimer from "./components/TypeTimer.vue";
 
 export default {
   name: "app",
   components: {
-    TypeArea
+    TypeArea,
+    TypeTimer,
   },
+  methods: {
+    startTimer() {
+      this.startTime = new Date();
+      this.isTyping = true;
+    },
+    stopTimer() {
+      this.endTime = new Date();
+      this.isTyping = false;
+    },
+    incrementCorrectCount() {
+      this.correctCount += 1;
+      this.totalTyped += 1;
+    },
+    incrementIncorrectCount() {
+      this.totalTyped += 1;
+    },
+    resetTypingData() {
+      this.isTyping = false;
+      this.startTime = null;
+      this.endTime = null;
+      this.correctCount = 0;
+      this.totalTyped = 0;
+    }
+  },
+  data() {
+    return {
+      isTyping: false,
+      startTime: null,
+      endTime: null,
+      correctCount: 0,
+      totalTyped: 0
+    }
+  }
+
 };
 
 </script>

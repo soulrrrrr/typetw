@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <h1>注音打字練習</h1>
-    <type-timer :is-typing="isTyping" :start-time="startTime" :end-time="endTime" :correct-count="correctCount"
-      :total-typed="totalTyped" />
+    <type-timer :is-typing="isTyping" :start-time="startTime" :end-time="endTime" :seconds-passed="secondsPassed"
+      :correct-count="correctCount" :total-typed="totalTyped" @tick="secondsPassed += 1"></type-timer>
     <type-area @startedTyping="startTimer" @finishedTyping="stopTimer" @correctTyped="incrementCorrectCount"
       @incorrectTyped="incrementIncorrectCount" @poem-refreshed="resetTypingData"></type-area>
+    <h4>- 請使用英文輸入法</h4>
 
   </div>
 </template>
@@ -40,6 +41,7 @@ export default {
       this.isTyping = false;
       this.startTime = null;
       this.endTime = null;
+      this.secondsPassed = 0;
       this.correctCount = 0;
       this.totalTyped = 0;
     }
@@ -49,6 +51,7 @@ export default {
       isTyping: false,
       startTime: null,
       endTime: null,
+      secondsPassed: 0,
       correctCount: 0,
       totalTyped: 0
     }

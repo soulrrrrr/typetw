@@ -1,14 +1,7 @@
 <template>
   <div>
-    <!-- You can format the times more nicely if you prefer -->
-    <!-- <p v-if="isTyping">Typing started at: {{ startTime }}</p>
-    <p v-if="endTime">Typing finished at: {{ endTime }}</p> -->
-    
-    <p>Correct characters typed: {{ correctCount }}</p>
-    <p>Total characters typed: {{ totalTyped }}</p>
-    
-    <p v-if="endTime">Time taken: {{ timeTaken }} seconds</p>
-    <p>Accuracy: {{ accuracy }}%</p>
+    <p>Time: {{ secondsPassed }} seconds</p>
+    <p>正確率: {{ accuracy }}%</p>
   </div>
 </template>
 
@@ -18,20 +11,50 @@ export default {
     isTyping: Boolean,
     startTime: Date,
     endTime: Date,
+    secondsPassed: Number,
     correctCount: Number,
     totalTyped: Number
   },
+  data() {
+    return {
+      timer: null
+    }
+  },
   computed: {
-    timeTaken() {
-      if(this.startTime && this.endTime) {
-        return ((this.endTime - this.startTime) / 1000).toFixed(2); // Time taken in seconds
-      }
-      return 0;
-    },
     accuracy() {
       if(this.totalTyped === 0) return 100; // To avoid division by zero
       return ((this.correctCount / this.totalTyped) * 100).toFixed(2); // Accuracy in percentage
     }
+  },
+  watch: {
+    isTyping(newValue) {
+      if (newValue) { // if typing started
+        this.startTimer();
+      } else { // if typing stopped
+        this.stopTimer();
+      }
+    }
+  },
+  methods: {
+    startTimer() {
+      this.timer = setInterval(() => {
+        this.$emit('tick');
+      }, 1000);
+    },
+    stopTimer() {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+    }
+  },
+  mounted() {
+    if (this.isTyping) { // in case it's already true when component is mounted
+      this.startTimer();
+    }
+  },
+  beforeUnmount() {
+    this.stopTimer();
   }
 }
 </script>

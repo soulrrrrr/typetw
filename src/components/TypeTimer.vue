@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>Time: {{ secondsPassed }} seconds</p>
-    <p>正確率: {{ accuracy }}%</p>
+    <p v-if="!isTyping && secondsPassed !== 0">恭喜完成！正確率: {{ accuracy }}%</p>
   </div>
 </template>
 

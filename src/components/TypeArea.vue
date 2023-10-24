@@ -174,7 +174,8 @@ export default {
         }
       } else if (event.key.length === 1) {
         // Check if the pressed key matches the current position in the keyboard representation
-        const isCorrect = this.keyboardText[this.currentKeyboardIndex] === event.key;
+        const correctKey = this.keyboardText[this.currentKeyboardIndex];
+        const isCorrect = correctKey === event.key;
         if (isCorrect) {
           this.displayedText.push({ letter: this.zhuyinText[this.displayedText.length], correct: true });
           this.$emit('correctTyped'); // Notify the parent of a correct character typed.

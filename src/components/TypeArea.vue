@@ -153,10 +153,7 @@ export default {
       this.$emit('poem-refreshed');
     },
     handleKeydown(event) {
-      // apple preventDefault() on spacebar
-      if (event.key === ' ') {
-        event.preventDefault();
-      }
+      event.preventDefault();
 
       if (this.displayedText.length === this.zhuyinText.length) {
         return;

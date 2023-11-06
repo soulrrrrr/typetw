@@ -124,7 +124,51 @@ export default {
       zhuyinText: poem.zhuyin,
       keyboardText: poem.keyboard,
       displayedText: [], // Initialize as empty, but you can use zhuyinText if you want it pre-filled
-      currentKeyboardIndex: 0 // To track the current position in the keyboard representation
+      currentKeyboardIndex: 0, // To track the current position in the keyboard representation
+      zhuyin_to_keyboard: {
+        'ㄅ': '1',
+        'ㄆ': 'q',
+        'ㄇ': 'a',
+        'ㄈ': 'z',
+        'ㄉ': '2',
+        'ㄊ': 'w',
+        'ㄋ': 's',
+        'ㄌ': 'x',
+        'ㄍ': 'e',
+        'ㄎ': 'd',
+        'ㄏ': 'c',
+        'ㄐ': 'r',
+        'ㄑ': 'f',
+        'ㄒ': 'v',
+        'ㄓ': '5',
+        'ㄔ': 't',
+        'ㄕ': 'g',
+        'ㄖ': 'b',
+        'ㄗ': 'y',
+        'ㄘ': 'h',
+        'ㄙ': 'n',
+        'ㄧ': 'u',
+        'ㄨ': 'j',
+        'ㄩ': 'm',
+        'ㄚ': '8',
+        'ㄛ': 'i',
+        'ㄜ': 'k',
+        'ㄝ': ',',
+        'ㄞ': '9',
+        'ㄟ': 'o',
+        'ㄠ': 'l',
+        'ㄡ': '.',
+        'ㄢ': '0',
+        'ㄣ': 'p',
+        'ㄤ': ';',
+        'ㄥ': '/',
+        'ㄦ': '-',
+        '˙': '7',
+        'ˊ': '6',
+        'ˇ': '3',
+        'ˋ': '4',
+        '-': ' ',
+      },
     };
   },
   computed: {
@@ -154,6 +198,7 @@ export default {
     },
     handleKeydown(event) {
       event.preventDefault();
+      console.log(event.key);
 
       if (this.displayedText.length === this.zhuyinText.length) {
         return;
@@ -170,9 +215,13 @@ export default {
           this.currentKeyboardIndex -= 1;
         }
       } else if (event.key.length === 1) {
+        // translate zhuyin to keyboard
+        const keyboardKey = this.zhuyin_to_keyboard[event.key];
+
+
         // Check if the pressed key matches the current position in the keyboard representation
         const correctKey = this.keyboardText[this.currentKeyboardIndex];
-        const isCorrect = correctKey === event.key;
+        const isCorrect = correctKey === event.key || correctKey === keyboardKey;
         if (isCorrect) {
           this.displayedText.push({ letter: this.zhuyinText[this.displayedText.length], correct: true });
           this.$emit('correctTyped'); // Notify the parent of a correct character typed.

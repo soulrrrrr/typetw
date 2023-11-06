@@ -23,7 +23,7 @@ export default {
   computed: {
     accuracy() {
       if(this.totalTyped === 0) return 100; // To avoid division by zero
-      return ((this.correctCount / this.totalTyped) * 100).toFixed(2); // Accuracy in percentage
+      return ((this.correctCount / this.totalTyped) * 100).toFixed(2); // Round to 2 decimal places
     }
   },
   watch: {

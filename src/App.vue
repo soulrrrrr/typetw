@@ -5,7 +5,6 @@
       :correct-count="correctCount" :total-typed="totalTyped" @tick="secondsPassed += 1"></type-timer>
     <type-area @startedTyping="startTimer" @finishedTyping="stopTimer" @correctTyped="incrementCorrectCount"
       @incorrectTyped="incrementIncorrectCount" @poem-refreshed="resetTypingData"></type-area>
-    <p>- 請使用英文輸入法練習</p>
     <p>- 標點符號用空格代替即可</p>
 
   </div>
